@@ -1,0 +1,59 @@
+SELECT
+    clientid,
+    type,
+    url,
+    payload.message,
+    payload.running,
+    payload.data.contouren,
+    payload.data.afwijking,
+    payload.data.voorgrond,
+    payload.data.beweging,
+    payload.data.helderheid,
+    payload.data.richting,
+    payload.data.leftoutcounter,
+    payload.data.rightoutcounter,
+    payload.data.objecten,
+    payload.data.leftcounter,
+    payload.data.rightcounter,
+    payload.data.upcounter,
+    payload.data.downcounter,
+    payload.data.undeterminedcounter,
+    EventProcessedUtcTime,
+    PartitionId,
+    EventEnqueuedUtcTime
+INTO
+    [paaspopSQLDatabaseOutput]
+FROM
+    [CrowdDetection]
+CROSS APPLY GetArrayElements(CrowdDetection.payload) AS [payload]
+CROSS APPLY GetArrayElements(CrowdDetection.payload.data) AS [data]
+WHERE CrowdDetection.type = 'CAM'
+
+SELECT
+    clientid,
+    type,
+    url,
+    payload.message,
+    payload.running,
+    payload.data.contouren,
+    payload.data.afwijking,
+    payload.data.voorgrond,
+    payload.data.beweging,
+    payload.data.helderheid,
+    payload.data.richting,
+    payload.data.leftoutcounter,
+    payload.data.rightoutcounter,
+    payload.data.objecten,
+    payload.data.leftcounter,
+    payload.data.rightcounter,
+    payload.data.upcounter,
+    payload.data.downcounter,
+    payload.data.undeterminedcounter,
+    EventProcessedUtcTime,
+    PartitionId,
+    EventEnqueuedUtcTime
+INTO
+    [FirstPowerBIDataset]
+FROM
+    [CrowdDetection]
+WHERE TYPE = 'CAM'
